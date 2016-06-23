@@ -3,6 +3,10 @@
 - name: Add my authorized keys
   authorized_key: user=root key="https://github.com/PedroArvela.keys"
 
+- name: Generate sshd_config
+  template: src=ssh/sshd_config dest=/etc/ssh/sshd_config mode=600
+  notify: restart sshd
+
 - name: Generate common locales
   locale_gen: name="{{item}}" state=present
   with_items:
