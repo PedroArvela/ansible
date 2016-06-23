@@ -1,0 +1,19 @@
+---
+
+- name: install GNU Stow
+  package: name=stow state=present
+
+- name: ensure config folder exists
+  file: path=/root/.config state=directory
+
+- name: clone dotfiles
+  git: repo=https://github.com/PedroArvela/dotfiles.git
+          dest=/root/.config/dotfiles
+
+- name: run GNU stow on dotfiles
+  command: stow -d /root/.config/dotfiles -t /root {{ item }}
+  with_items:
+          - bash
+          - git
+          - tmux
+          - vim

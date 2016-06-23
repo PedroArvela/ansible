@@ -1,0 +1,27 @@
+---
+
+- name: Add my authorized keys
+  authorized_key: user=root key="https://github.com/PedroArvela.keys"
+
+- name: Generate common locales
+  locale_gen: name="{{item}}" state=present
+  with_items:
+          - en_US.UTF-8
+          - pt_PT.UTF-8
+
+- name: Install Unattended Upgrades
+  package: name="{{item}}" state=present
+  with_items:
+          - unattended-upgrades
+          - apt-listchanges
+
+- name: Set up Unattended Upgrades
+  copy: src=apt/20auto-upgrades dest=/etc/apt/apt.conf.d/20auto-upgrades
+
+- name: install utilities
+  package: name="{{item}}" state=present
+  with_items:
+          - git
+          - htop
+          - tmux
+          - vim

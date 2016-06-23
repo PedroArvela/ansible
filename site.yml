@@ -1,0 +1,9 @@
+---
+- hosts: all
+  roles:
+          - common
+          - dotfiles
+
+#- include: dns.yml
+- include: web.yml
+#- include: mail.yml

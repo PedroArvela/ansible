@@ -1,0 +1,10 @@
+devhost
+
+[dns]
+devhost
+
+[web]
+devhost
+
+[mail]
+devhost
