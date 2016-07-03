@@ -4,6 +4,11 @@
           - common
           - dotfiles
 
+- hosts: all
+  roles:
+          - { role: virtual,  when: ansible_virtualization_role == "guest" }
+          - { role: physical, when: ansible_virtualization_role == "host" }
+
 #- include: dns.yml
 - include: web.yml
 #- include: mail.yml
