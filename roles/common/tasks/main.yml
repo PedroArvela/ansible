@@ -13,6 +13,9 @@
           - en_US.UTF-8
           - pt_PT.UTF-8
 
+- name: Set the default locale for Debian systems
+  copy: src=locale dest=/etc/default/locale owner=root group=root mode=0644
+
 - name: Set timezone file for Debian systems
   copy: src=timezone dest=/etc/timezone owner=root group=root mode=0644
 
