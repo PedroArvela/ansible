@@ -1,0 +1,5 @@
+---
+
+# In virtualized systems assume the hardware clock is kept in sync by the host
+- name: Remove NTP on virtual systems
+  package: name=ntp state=absent
