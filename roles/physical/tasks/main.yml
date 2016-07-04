@@ -1,0 +1,13 @@
+---
+
+- name: Install NTP package
+  package: name=ntp state=present
+
+- name: Configure NTP
+  copy: src=ntp.conf dest=/etc/ntp.conf owner=root group=root mode=0644
+
+- name: Configure the ntpd daemon on Debian systems
+  copy: src=ntp.default dest=/etc/default/ntp owner=root group=root mode=0644
+
+- name: Start NTP service
+  service: name=ntp state=started enabled=yes
