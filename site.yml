@@ -3,7 +3,7 @@
   roles:
           - common
           - { role: virtual,  when: ansible_virtualization_role == "guest" }
-          - { role: physical, when: ansible_virtualization_role == "host" }
+          - { role: physical, when: not ansible_virtualization_role == "guest" }
           - dotfiles
 
 #- include: dns.yml
