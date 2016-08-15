@@ -34,7 +34,9 @@
 - name: install utilities
   package: name="{{item}}" state=present
   with_items:
+          - bash-completion
           - git
           - htop
           - tmux
+          - tree
           - vim
