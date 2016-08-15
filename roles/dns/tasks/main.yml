@@ -7,7 +7,7 @@
   apt_repository: repo='deb http://repo.powerdns.com/debian jessie-auth-40 main' state=present filename=pdns-server update_cache=yes
 
 - name: Create pdns directories
-  file: path="{{item}}" state=directory mode=0644 owner=root group=root
+  file: path="{{item}}" state=directory mode=0755 owner=root group=root
   with_items:
           - /etc/powerdns/pdns.d
           - /var/lib/powerdns
