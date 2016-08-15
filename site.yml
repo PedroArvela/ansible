@@ -6,6 +6,6 @@
           - { role: physical, when: not ansible_virtualization_role == "guest" }
           - dotfiles
 
-#- include: dns.yml
+- include: dns.yml
 - include: web.yml
 #- include: mail.yml

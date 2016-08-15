@@ -11,3 +11,17 @@ To run, execute:
 ```bash
 ansible-playbook -i staging site.yml
 ```
+
+## Custom Variables
+
+These are useful for when a command is supposed to be run once in very specific
+conditions.
+
+These are to be appended to the executed line as such:
+
+```bash
+ansible-playbook -i stagin site.yml -e "<variable>=<value>"
+```
+
+* `pdns_first_run`. When true, tells that PowerDNS is being run for the first
+time and a database file should be created.

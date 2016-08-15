@@ -1,0 +1,32 @@
+---
+
+- name: Add PowerDNS repo key
+  apt_key: id='0xFD380FBB' url='https://repo.powerdns.com/FD380FBB-pub.asc' state=present
+
+- name: Add PowerDNS repository
+  apt_repository: repo='deb http://repo.powerdns.com/debian jessie-auth-40 main' state=present filename=pdns-server update_cache=yes
+
+- name: Create pdns directories
+  file: path="{{item}}" state=directory mode=0644 owner=root group=root
+  with_items:
+          - /etc/powerdns/pdns.d
+          - /var/lib/powerdns
+
+- name: Copy pdns init sqlite3 command
+  copy: src=sqlite3-init.sql dest="/etc/powerdns/sqlite3-init.sql" mode=0644
+
+- name: Create empty pdns database
+  command: /usr/bin/sqlite3 /var/lib/powerdns/db.sqlite -batch -init /etc/powerdns/sqlite3-init.sql
+  when: pdns_first_run is defined and pdns_first_run
+
+- name: Install PowerDNS configuration
+  copy: src="powerdns.conf" dest="/etc/powerdns/pdns.d/ansible.conf" mode=0644
+
+- name: Install PowerDNS database
+  package: name="{{item}}" state=present
+  with_items:
+          - pdns-server
+          - pdns-backend-sqlite3
+
+- name: Start pdns service
+  service: name=pdns state=started enabled=yes
