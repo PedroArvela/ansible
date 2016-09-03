@@ -37,6 +37,7 @@
           - bash-completion
           - git
           - htop
+          - lsof
           - tmux
           - tree
           - vim
