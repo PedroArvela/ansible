@@ -1,0 +1,21 @@
+---
+
+- name: Install mail related packages
+  package: name="{{item}}" state=present
+  with_items:
+          - dovecot-core
+          - dovecot-imapd
+          - dovecot-sieve
+          - dovecot-managesieved
+          - opendkim
+          - postfix
+          - postfix-policyd-spf-python
+
+- name: Configure postfix from template
+  template: src=postfix/main.cf dest=/etc/postfix/main.cf owner=root group=root mode=0644
+
+- name: Configure remaining postfix files
+  copy: src=postfix/master.cf dest=/etc/postfix/master.cf owner=root group=root mode=0644
+
+- name: Configure mail aliases
+  copy: src=aliases dest=/etc/aliases owner=root group=root mode=0644

@@ -1,0 +1,5 @@
+---
+
+- hosts: mail
+  roles:
+          - { name: mail, tags: mail }
