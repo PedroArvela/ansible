@@ -63,10 +63,23 @@ smtpd_helo_required     = yes
 strict_rfc821_envelopes = yes
 disable_vrfy_command    = yes
 
+# Allow connections from trusted networks only.
+smtpd_client_restrictions =	permit_mynetworks, reject
+
+# Don't talk to mail systems that don't know their own hostname.
 smtpd_helo_restrictions =	reject_unknown_helo_hostname
 
+# Don't accept mail from domains that don't exist.
 smtpd_sender_restrictions =	reject_unknown_sender_domain
 
+# Relay control (Postfix 2.10 and later): local clients and
+# authenticated clients may specify any destination domain.
+smtpd_relay_restrictions =	permit_mynetworks,
+				permit_sasl_authenticated,
+				reject_unauth_destination
+
+# Spam control: exclude local clients and authenticated clients
+# from DNSBL lookups.
 smtpd_recipient_restrictions =	permit_mynetworks,
 				permit_sasl_authenticated,
 				reject_unauth_destination,
@@ -74,6 +87,11 @@ smtpd_recipient_restrictions =	permit_mynetworks,
 				reject_rhsbl_reverse_client dbl.spamhaus.org,
 				reject_rhsbl_helo dbl.spamhaus.org,
 				reject_rhsbl_sender dbl.spamhaus.org,
-				check_policy_service unix:private/policy-spf
+				check_policy_service unix:private/policy-spf,
+				check_policy_service unix:/var/run/postgray.socket
 
+# Block clients that speak too early.
 smtpd_data_restrictions =	reject_unauth_pipelining
+
+# Enforce mail volume quota via policy service callouts.
+smtpd_end_of_data_restrictions = check_policy_service unix:private/policy

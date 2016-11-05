@@ -8,8 +8,10 @@
           - dovecot-sieve
           - dovecot-managesieved
           - opendkim
+          - opendkim-tools
           - postfix
           - postfix-policyd-spf-python
+          - postgrey
 
 - name: Configure postfix from template
   template: src=postfix/main.cf dest=/etc/postfix/main.cf owner=root group=root mode=0644
@@ -19,3 +21,9 @@
 
 - name: Configure mail aliases
   copy: src=aliases dest=/etc/aliases owner=root group=root mode=0644
+
+- name: Configure Opendkim
+  template: src=opendkim/opendkim.conf dest=/etc/opendkim.conf owner=root group=root mode=0644
+
+- name: Configure Postgrey
+  copy: src=postgrey/default dest=/etc/default/postgrey owner=root group=root mode=0644

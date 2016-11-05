@@ -1,0 +1,3 @@
+# postgrey startup options, created for Debian
+
+POSTGREY_OPTS="--unix=/var/spool/postfix/var/run/postgrey.socket --delay=60"
