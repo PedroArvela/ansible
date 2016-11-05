@@ -6,6 +6,12 @@
 - name: Add PowerDNS repository
   apt_repository: repo='deb http://repo.powerdns.com/debian jessie-auth-40 main' state=present filename=pdns-server update_cache=yes
 
+- name: Create PowerDNS group
+  group: name="pdns" state=present system=yes
+
+- name: Create PowerDNS user
+  user: name="pdns" state=present system=yes groups=crontab,pdns comment="PowerDNS" home="/var/spool/powerdns" createhome=yes shell="/bin/false"
+
 - name: Create pdns config directory
   file: path="/etc/powerdns/pdns.d" state=directory mode=0755 owner=root group=root
 
@@ -20,7 +26,7 @@
   when: pdns_first_run is defined and pdns_first_run
 
 - name: Install PowerDNS configuration
-  copy: src="powerdns.conf" dest="/etc/powerdns/pdns.d/ansible.conf" mode=0644
+  template: src="powerdns.conf" dest="/etc/powerdns/pdns.d/ansible.conf" mode=0644
 
 - name: Install PowerDNS database
   package: name="{{item}}" state=present

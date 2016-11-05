@@ -2,4 +2,4 @@
 
 - hosts: dns
   roles:
-          - dns
+          -  { name: dns, tags: dns }
