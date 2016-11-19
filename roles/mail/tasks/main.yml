@@ -22,6 +22,9 @@
 - name: Configure mail aliases
   copy: src=aliases dest=/etc/aliases owner=root group=root mode=0644
 
+- name: Update aliases database
+  command: /usr/sbin/postalias /etc/aliases
+
 - name: Configure Opendkim
   template: src=opendkim/opendkim.conf dest=/etc/opendkim.conf owner=root group=root mode=0644
 

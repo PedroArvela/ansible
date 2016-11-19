@@ -1,14 +1,23 @@
 # /etc/aliases
-mailer-daemon: postmaster
-postmaster: root
-nobody: root
+
+# Root alias
+root: jose.pedro
+
+# Daemons
+abuse: root
+ftp: root
 hostmaster: root
-usenet: root
+mailer-daemon: postmaster
 news: root
+nobody: root
+noc: root
+postmaster: root
+security: root
+usenet: root
 webmaster: root
 www: root
-ftp: root
-abuse: root
-noc: root
-security: root
-root: jose.pedro
+
+# Other aliases
+jose.pedro: pedro
+
+# vim: ft=mailaliases
