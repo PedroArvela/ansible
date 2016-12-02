@@ -2,3 +2,18 @@
 
 - name: install nginx
   package: name=nginx state=present
+
+- name: Install Certbot
+  apt:
+          name: certbot
+          state: present
+          default_release: jessie-backports
+
+- name: Configure nginx
+  copy:
+          src: nginx/tls.conf
+          dest: /etc/nginx/conf.d/tls.conf
+          owner: root
+          group: root
+          mode: 0644
+

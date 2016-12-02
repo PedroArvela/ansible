@@ -1,7 +1,7 @@
 ---
 - hosts: all
   roles:
-          - common
+          - { name: common, tags: common }
           - { role: virtual,  when: ansible_virtualization_role == "guest" }
           - { role: physical, when: not ansible_virtualization_role == "guest" }
           - dotfiles

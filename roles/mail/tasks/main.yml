@@ -30,3 +30,6 @@
 
 - name: Configure Postgrey
   copy: src=postgrey/default dest=/etc/default/postgrey owner=root group=root mode=0644
+
+- name: Configure Dovecot
+  copy: src=dovecot/local.conf dest=/etc/dovecot/local.conf owner=root group=root mode=0644
