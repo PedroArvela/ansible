@@ -19,6 +19,45 @@
 - name: Configure remaining postfix files
   copy: src=postfix/master.cf dest=/etc/postfix/master.cf owner=root group=root mode=0644
 
+- name: Configure postfix user
+  user:
+          name: postfix
+          system: yes
+          group: postfix
+          groups: opendkim,postgrey
+          home: /var/spool/postfix
+          shell: /bin/false
+
+- name: Configure opendkim user
+  user:
+          name: opendkim
+          system: yes
+          group: opendkim
+          groups: postfix
+          home: /var/run/opendkim
+          shell: /bin/false
+
+- name: Configure Postgrey user
+  user:
+          name: postgrey
+          system: yes
+          group: postgrey
+          groups: postfix
+          home: /var/lib/postgrey
+          shell: /bin/false
+
+- name: Create Postfix socket folder
+  file:
+          path: "/var/spool/postfix/{{ item }}"
+          state: directory
+          owner: "{{ item }}"
+          group: postfix
+          mode: 0775
+  with_items:
+          - opendkim
+          - postgrey
+
+
 - name: Configure mail aliases
   copy: src=aliases dest=/etc/aliases owner=root group=root mode=0644
 

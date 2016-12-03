@@ -55,16 +55,19 @@ smtpd_sasl_auth_enable = yes
 # DKIM settings
 milter_default_action = accept
 milter_protocol = 6
-smtpd_milters = unix:/var/run/opendkim/opendkim.sock
-non_smtpd_milters = unix:/var/run/opendkim/opendkim.sock
+smtpd_milters = unix:opendkim/opendkim
+non_smtpd_milters = unix:opendkim/opendkim
 
 # SMTP security settings
 smtpd_helo_required     = yes
 strict_rfc821_envelopes = yes
 disable_vrfy_command    = yes
 
-# Allow connections from trusted networks only.
-smtpd_client_restrictions =	permit_mynetworks, reject
+# Defines who can connect. Uncomment to allow only delivery of email from
+# authorized clients.
+#smtpd_client_restrictions =	permit_mynetworks,
+#				permit_sasl_authenticated,
+#				reject
 
 # Don't talk to mail systems that don't know their own hostname.
 smtpd_helo_restrictions =	reject_unknown_helo_hostname
@@ -88,10 +91,10 @@ smtpd_recipient_restrictions =	permit_mynetworks,
 				reject_rhsbl_helo dbl.spamhaus.org,
 				reject_rhsbl_sender dbl.spamhaus.org,
 				check_policy_service unix:private/policy-spf,
-				check_policy_service unix:/var/run/postgray.socket
+				check_policy_service unix:postgrey/postgrey
 
 # Block clients that speak too early.
 smtpd_data_restrictions =	reject_unauth_pipelining
 
 # Enforce mail volume quota via policy service callouts.
-smtpd_end_of_data_restrictions = check_policy_service unix:private/policy
+#smtpd_end_of_data_restrictions = check_policy_service unix:private/policy
