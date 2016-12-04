@@ -12,7 +12,7 @@ append_dot_mydomain = no
 readme_directory = no
 
 # Information about the host
-myhostname = {{ ansible_hostname }}
+myhostname = {{ ansible_hostname }}.{{ ansible_domain }}
 mydomain = {{ ansible_domain }}
 myorigin = {{ ansible_domain }}
 
