@@ -1,19 +1,55 @@
 ---
 
 - name: install nginx
-  package: name=nginx state=present
+  package:
+    name: nginx
+    state: present
+
+- name: generate Diffie-Hellman parameters
+  command: /usr/bin/openssl dhparam -out /etc/ssl/dhparams.pem 4096
+  args:
+    creates: /etc/ssl/dhparams.pem
 
 - name: Install Certbot
   apt:
-          name: certbot
-          state: present
-          default_release: jessie-backports
+    name: certbot
+    state: present
+    default_release: jessie-backports
 
 - name: Configure nginx
   copy:
-          src: nginx/tls.conf
-          dest: /etc/nginx/conf.d/tls.conf
-          owner: root
-          group: root
-          mode: 0644
+    src: "{{ item }}"
+    dest: "/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - etc/nginx/nginx.conf
+    - etc/nginx/conf.d/tls.conf
 
+- name: Create webroot directory
+  file:
+    path: "/var/www/{{ ansible_domain }}/htdocs"
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+
+- name: Create domain configuration
+  template:
+    src: "site-template"
+    dest: "/etc/nginx/sites-available/{{ ansible_domain }}"
+    owner: root
+    group: root
+    mode:  0644
+
+- name: Symlink domain configurations
+  file:
+    dest: "/etc/nginx/sites-enabled/{{ item.dest }}"
+    state: "{{ item.state }}"
+    src: "{{ item.src }}"
+  with_items:
+    - { dest: "default", state: absent, src: "", }
+    - { dest: "{{ ansible_domain }}", state: link, src: "/etc/nginx/sites-available/{{ ansible_domain }}", }
+
+# vim: expandtab shiftwidth=2

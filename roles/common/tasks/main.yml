@@ -10,8 +10,8 @@
 - name: Generate common locales
   locale_gen: name="{{item}}" state=present
   with_items:
-          - en_US.UTF-8
-          - pt_PT.UTF-8
+    - en_US.UTF-8
+    - pt_PT.UTF-8
 
 - name: Set the default locale for Debian systems
   copy: src=locale dest=/etc/default/locale owner=root group=root mode=0644
@@ -22,11 +22,19 @@
 - name: Set localtime symlink
   file: src=/usr/share/zoneinfo/Europe/Lisbon dest=/etc/localtime state=link force=yes
 
+- name: Add additional repositories
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - "deb http://ftp.debian.org/debian jessie-backports main"
+
 - name: Install Unattended Upgrades
   package: name="{{item}}" state=present
   with_items:
-          - unattended-upgrades
-          - apt-listchanges
+    - unattended-upgrades
+    - apt-listchanges
 
 - name: Set up Unattended Upgrades
   copy: src=apt/20auto-upgrades dest=/etc/apt/apt.conf.d/20auto-upgrades
@@ -34,11 +42,13 @@
 - name: install utilities
   package: name="{{item}}" state=present
   with_items:
-          - bash-completion
-          - dnsutils
-          - git
-          - htop
-          - lsof
-          - tmux
-          - tree
-          - vim
+    - bash-completion
+    - dnsutils
+    - git
+    - htop
+    - lsof
+    - tmux
+    - tree
+    - vim
+
+# vim: expandtab shiftwidth=2

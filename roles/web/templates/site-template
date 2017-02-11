@@ -1,0 +1,48 @@
+# Redirect to non-www website
+server {
+	listen 80;
+	listen [::]:80;	
+	listen 443 ssl;
+	listen [::]:443 ssl;
+	server_name www.{{ ansible_domain }};
+
+	# SSL certificates from letsencrypt
+	ssl_certificate /etc/letsencrypt/live/{{ ansible_domain }}/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/{{ ansible_domain }}/privkey.pem;
+
+	return 301 https://{{ ansible_domain }}$request_uri;
+}
+
+# Redirect to SSL configuration
+server {
+	listen 80;
+	listen [::]:80;
+	server_name {{ ansible_domain }};
+
+	return 301 https://{{ ansible_domain }}$request_uri;
+}
+
+# Default server configuration
+server {
+	listen 443 ssl;
+	listen [::]:443 ssl;
+	server_name {{ ansible_domain }};
+
+	# SSL certificates from letsencrypt
+	ssl_certificate /etc/letsencrypt/live/{{ ansible_domain }}/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/{{ ansible_domain }}/privkey.pem;
+
+	root /var/www/{{ ansible_domain }}/htdocs;
+
+	# Add index.php to the list if you are using PHP
+	index index.html index.htm;
+
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files $uri $uri/ =404;
+	}
+}
+
+# vim: ft=conf
+
